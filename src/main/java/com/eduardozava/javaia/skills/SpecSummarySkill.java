@@ -25,8 +25,8 @@ public class SpecSummarySkill implements Skill<MicroserviceSpecRequest, Analyzed
         inferredCapabilities.add("Observabilidade básica e validação de entrada");
 
         return new AnalyzedSpec(
-                input.serviceName().trim(),
-                input.description().trim(),
+                java.util.Objects.requireNonNull(input.serviceName(), "serviceName").trim(),
+                java.util.Objects.requireNonNull(input.description(), "description").trim(),
                 entities,
                 endpoints,
                 inferredCapabilities
