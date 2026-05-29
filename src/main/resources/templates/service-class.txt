@@ -1,0 +1,11 @@
+package {{package}};
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class {{className}} {
+
+    public String status() {
+        return "{{serviceName}}-service-ready";
+    }
+}
