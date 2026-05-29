@@ -32,7 +32,7 @@ public class ProjectStructureGenerator {
         String serviceContent = template
                 .replace("{{package}}", servicePackage)
                 .replace("{{className}}", serviceClass)
-                .replace("{{serviceName}}", spec.serviceName());
+                .replace("{{serviceName}}", spec.serviceName().replace("\\", "\\\\").replace("\"", "\\\""));
 
         artifacts.add(new GeneratedArtifact(servicePath, serviceContent));
         artifacts.add(new GeneratedArtifact("README-generated.md", "# " + spec.serviceName() + "\n\n" + spec.normalizedDescription()));
