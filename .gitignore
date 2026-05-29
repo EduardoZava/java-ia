@@ -1,0 +1,29 @@
+# Environment secrets
+.env
+
+# Maven build output
+target/
+**/target/
+
+# Java
+*.class
+*.jar
+*.war
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+**/node_modules/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# macOS
+.DS_Store
+
+# Docker
+*.log
