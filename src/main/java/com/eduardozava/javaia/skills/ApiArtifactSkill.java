@@ -2,6 +2,7 @@ package com.eduardozava.javaia.skills;
 
 import com.eduardozava.javaia.infra.deepseek.DeepSeekClient;
 import com.eduardozava.javaia.infra.deepseek.DeepSeekConfigurationException;
+import com.eduardozava.javaia.generator.NamingUtils;
 import com.eduardozava.javaia.model.ApiDesign;
 import com.eduardozava.javaia.model.ApiGenerationInput;
 import com.eduardozava.javaia.model.GeneratedArtifact;
@@ -23,7 +24,7 @@ public class ApiArtifactSkill implements Skill<ApiGenerationInput, ApiDesign> {
 
     @Override
     public ApiDesign execute(ApiGenerationInput input) {
-        String className = toPascalCase(input.analyzedSpec().serviceName()) + "Controller";
+        String className = NamingUtils.toPascalCase(input.analyzedSpec().serviceName()) + "Controller";
         String packageName = input.architecture().basePackage() + ".controller";
 
         String aiComment;
@@ -53,20 +54,4 @@ public class ApiArtifactSkill implements Skill<ApiGenerationInput, ApiDesign> {
         );
     }
 
-    private String toPascalCase(String value) {
-        if (value == null || value.isBlank()) {
-            return "Generated";
-        }
-        String[] parts = value.trim().split("[^a-zA-Z0-9]+");
-        StringBuilder builder = new StringBuilder();
-        for (String part : parts) {
-            if (!part.isBlank()) {
-                builder.append(Character.toUpperCase(part.charAt(0)));
-                if (part.length() > 1) {
-                    builder.append(part.substring(1));
-                }
-            }
-        }
-        return builder.isEmpty() ? "Generated" : builder.toString();
-    }
 }

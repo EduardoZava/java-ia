@@ -42,14 +42,20 @@ public class HttpDeepSeekClient implements DeepSeekClient {
                     .retrieve()
                     .body(String.class);
 
-            JsonNode root = objectMapper.readTree(response == null ? "{}" : response);
+            if (response == null || response.isBlank()) {
+                throw new DeepSeekClientException("DeepSeek retornou resposta vazia.");
+            }
+
+            JsonNode root = objectMapper.readTree(response);
             JsonNode content = root.path("choices").path(0).path("message").path("content");
             if (content.isMissingNode() || content.asText().isBlank()) {
                 return "DeepSeek retornou resposta vazia para o prompt informado.";
             }
             return content.asText();
+        } catch (DeepSeekClientException ex) {
+            throw ex;
         } catch (Exception ex) {
-            throw new RuntimeException("Falha ao chamar DeepSeek: " + ex.getMessage(), ex);
+            throw new DeepSeekClientException("Falha ao chamar DeepSeek.", ex);
         }
     }
 }

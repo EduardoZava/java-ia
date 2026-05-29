@@ -34,7 +34,7 @@ Pacotes principais:
 
 ## Stack sugerida
 
-- Java 17+ (compatível com Spring Boot 3; recomendável evoluir para Java 21 quando o ambiente suportar)
+- Java 17 (mínimo atual do projeto; recomendável evoluir para Java 21 quando o ambiente suportar)
 - Spring Boot 3
 - Maven
 - Spring Web + Validation

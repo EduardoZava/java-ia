@@ -24,7 +24,7 @@ public class ProjectStructureGenerator {
     public List<GeneratedArtifact> generate(AnalyzedSpec spec, ServiceArchitecture architecture, ApiDesign apiDesign) {
         List<GeneratedArtifact> artifacts = new ArrayList<>(apiDesign.artifacts());
 
-        String serviceClass = toPascalCase(spec.serviceName()) + "Service";
+        String serviceClass = NamingUtils.toPascalCase(spec.serviceName()) + "Service";
         String servicePackage = architecture.basePackage() + ".service";
         String servicePath = "src/main/java/" + servicePackage.replace('.', '/') + "/" + serviceClass + ".java";
 
@@ -48,20 +48,4 @@ public class ProjectStructureGenerator {
         }
     }
 
-    private String toPascalCase(String value) {
-        if (value == null || value.isBlank()) {
-            return "Generated";
-        }
-        String[] parts = value.trim().split("[^a-zA-Z0-9]+");
-        StringBuilder builder = new StringBuilder();
-        for (String part : parts) {
-            if (!part.isBlank()) {
-                builder.append(Character.toUpperCase(part.charAt(0)));
-                if (part.length() > 1) {
-                    builder.append(part.substring(1));
-                }
-            }
-        }
-        return builder.isEmpty() ? "Generated" : builder.toString();
-    }
 }
