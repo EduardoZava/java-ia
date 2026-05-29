@@ -16,13 +16,14 @@ public class ApiSkeletonSkill implements Skill {
 
         for (EndpointSpec endpoint : endpoints) {
             methods.append("    // ").append(nullSafe(endpoint.description())).append("\n")
-                    .append("    // ").append(endpoint.method()).append(" ").append(endpoint.path()).append("\n")
+                    .append("    ").append(mappingAnnotation(endpoint)).append("\n")
                     .append("    public String ")
                     .append(buildMethodName(endpoint))
                     .append("() { return \"TODO\"; }\n\n");
         }
 
         if (methods.isEmpty()) {
+            methods.append("    @GetMapping(\"/health\")\n");
             methods.append("    public String health() { return \"ok\"; }\n");
         }
 
@@ -30,6 +31,15 @@ public class ApiSkeletonSkill implements Skill {
         context.addArtifact("output/%s/src/main/java/com/example/%s/api/GeneratedApi.java".formatted(context.spec().serviceName(), pkg), """
                 package com.example.%s.api;
 
+                import org.springframework.web.bind.annotation.RequestMapping;
+                import org.springframework.web.bind.annotation.RestController;
+                import org.springframework.web.bind.annotation.GetMapping;
+                import org.springframework.web.bind.annotation.PostMapping;
+                import org.springframework.web.bind.annotation.PutMapping;
+                import org.springframework.web.bind.annotation.DeleteMapping;
+
+                @RestController
+                @RequestMapping("/api")
                 public class GeneratedApi {
                 %s}
                 """.formatted(pkg, methods));
@@ -38,7 +48,19 @@ public class ApiSkeletonSkill implements Skill {
     private String buildMethodName(EndpointSpec endpoint) {
         String method = endpoint.method() == null ? "do" : endpoint.method().toLowerCase();
         String path = endpoint.path() == null ? "endpoint" : endpoint.path().replaceAll("[^a-zA-Z0-9]", "_");
-        return (method + "_" + path).replaceAll("_+", "_");
+        String candidate = (method + "_" + path).replaceAll("_+", "_").replaceAll("^_+|_+$", "");
+        return candidate.isBlank() ? "generatedEndpoint" : candidate;
+    }
+
+    private String mappingAnnotation(EndpointSpec endpoint) {
+        String method = endpoint.method() == null ? "GET" : endpoint.method().toUpperCase();
+        String path = endpoint.path() == null || endpoint.path().isBlank() ? "/" : endpoint.path();
+        return switch (method) {
+            case "POST" -> "@PostMapping(\"%s\")".formatted(path);
+            case "PUT" -> "@PutMapping(\"%s\")".formatted(path);
+            case "DELETE" -> "@DeleteMapping(\"%s\")".formatted(path);
+            default -> "@GetMapping(\"%s\")".formatted(path);
+        };
     }
 
     private String sanitizeName(String input) {

@@ -24,18 +24,21 @@ public class HttpDeepSeekClient implements DeepSeekClient {
     private final String apiKey;
     private final String baseUrl;
     private final String model;
+    private final int timeoutSeconds;
 
     public HttpDeepSeekClient(
             ObjectMapper objectMapper,
-            @Value("${DEEPSEEK_API_KEY:}") String apiKey,
-            @Value("${DEEPSEEK_BASE_URL:https://api.deepseek.com}") String baseUrl,
-            @Value("${DEEPSEEK_MODEL:deepseek-chat}") String model
+            @Value("${deepseek.api-key:${DEEPSEEK_API_KEY:}}") String apiKey,
+            @Value("${deepseek.base-url:${DEEPSEEK_BASE_URL:https://api.deepseek.com}}") String baseUrl,
+            @Value("${deepseek.model:${DEEPSEEK_MODEL:deepseek-chat}}") String model,
+            @Value("${deepseek.timeout-seconds:${DEEPSEEK_TIMEOUT_SECONDS:30}}") int timeoutSeconds
     ) {
-        this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(15)).build();
+        this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(timeoutSeconds)).build();
         this.objectMapper = objectMapper;
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
         this.model = model;
+        this.timeoutSeconds = timeoutSeconds;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class HttpDeepSeekClient implements DeepSeekClient {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(baseUrl + "/chat/completions"))
-                    .timeout(Duration.ofSeconds(30))
+                    .timeout(Duration.ofSeconds(timeoutSeconds))
                     .header("Authorization", "Bearer " + apiKey)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(body))

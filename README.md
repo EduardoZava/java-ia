@@ -29,7 +29,7 @@ Pacotes principais:
 
 ## Stack sugerida
 
-- Java 17+ (compatível; recomendado evoluir para 21 quando disponível)
+- Java 17 (mínimo e padrão do `pom.xml` atual) / Java 21 recomendado para evolução
 - Spring Boot 3.3.x
 - Maven
 - Spring Web + Validation
