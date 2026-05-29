@@ -42,7 +42,7 @@ public class ApiArtifactSkill implements Skill<ApiGenerationInput, ApiDesign> {
                 "import org.springframework.web.bind.annotation.RequestMapping;\n" +
                 "import org.springframework.web.bind.annotation.RestController;\n\n" +
                 "@RestController\n" +
-                "@RequestMapping(\"/api/" + input.analyzedSpec().serviceName().toLowerCase() + "\")\n" +
+                "@RequestMapping(\"/api/" + input.analyzedSpec().serviceName().toLowerCase().replaceAll("[^a-z0-9\\-]", "") + "\")\n" +
                 "public class " + className + " {\n\n" +
                 "    @GetMapping(\"/health\")\n" +
                 "    public String health() {\n" +
