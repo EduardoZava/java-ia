@@ -42,10 +42,10 @@ public class GenerationOrchestrator {
         var artifacts = projectStructureGenerator.generate(analyzedSpec, architecture, apiDesign);
 
         StringJoiner output = new StringJoiner("\n");
-        output.add("Geração concluída para serviço: " + request.serviceName());
+        output.add("Geração concluída para serviço: " + analyzedSpec.serviceName());
         output.add("Artefatos: " + artifacts.size());
         reviewNotes.forEach(output::add);
 
-        return new GenerationResult(request.serviceName(), artifacts, reviewNotes, output.toString());
+        return new GenerationResult(analyzedSpec.serviceName(), artifacts, reviewNotes, output.toString());
     }
 }
