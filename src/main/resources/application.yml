@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: java-ia
+
+deepseek:
+  api-key: ${DEEPSEEK_API_KEY:}
+  model: ${DEEPSEEK_MODEL:deepseek-chat}
+  base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com/chat/completions}
