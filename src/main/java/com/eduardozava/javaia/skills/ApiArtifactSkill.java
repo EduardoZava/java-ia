@@ -32,6 +32,8 @@ public class ApiArtifactSkill implements Skill<ApiGenerationInput, ApiDesign> {
             aiComment = deepSeekClient.generateText(promptTemplateService.buildApiPrompt(input.analyzedSpec(), input.architecture()));
         } catch (DeepSeekConfigurationException ex) {
             aiComment = "DeepSeek desabilitado: " + ex.getMessage();
+        } catch (com.eduardozava.javaia.infra.deepseek.DeepSeekClientException ex) {
+            aiComment = "DeepSeek falhou: " + ex.getMessage();
         }
 
         String path = "src/main/java/" + packageName.replace('.', '/') + "/" + className + ".java";
